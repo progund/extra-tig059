@@ -65,7 +65,7 @@ public class TestFilter {
                                     (s) -> { return (s.year() >= 1980 && s.year() <= 1989 ) ; } ));
     System.out.println();      
 
-    System.out.println("Songs filtered using Stream 60's SongFilter");
+    System.out.println("Songs filtered using Stream 60's without SongFilter");
     System.out.println(songs
                        .stream()
                        .filter( s -> (s.year() >= 1960) && (s.year() <= 1969) )
