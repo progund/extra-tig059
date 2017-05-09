@@ -41,6 +41,16 @@ import java.util.function.Predicate;
  *
  * Kommentar: Det vore ännu bättre om vi kunde skicka in som
  * argument även prisförändringen i procent eller så.
+ *
+ * Lösningsförslag för versionen med lista, predicate och factor:
+ *   static int newPrice(List<BeerSeller> sellers,
+ *                       Predicate<BeerSeller> pred,
+ *                       double factor)
+ *
+ * Den versionen av newPrice tar en lista med sellers,
+ * ett predikat för vilka som skall ändras och en faktor
+ * att multiplicera priset med. Vi anropar den med 0.9
+ * dvs en sänkning med 10%. 
  */
 public class BeerSeller {
 
@@ -103,12 +113,25 @@ class TestBeerSeller {
   static int newPrice(List<BeerSeller> sellers, Predicate<BeerSeller> pred) {
     int count = 0;
     /* Loop through all beer sellers, and if
-       the current seller has manufacturer Dugges
-       AND pub is (either Rover or BrewDog), 
-       then lower the price with 10% */
+       the test returns true then lower the price with 10% */
     for (BeerSeller seller : sellers) {
       if(pred.test(seller)) {
         seller.changePrice(seller.price()*0.9);
+        count++;
+      }
+    }
+    return count;
+  }
+
+  static int newPrice(List<BeerSeller> sellers,
+                      Predicate<BeerSeller> pred,
+                      double factor) {
+    int count = 0;
+    /* Loop through all beer sellers, and if
+       the test returns true then change the price with factor */
+    for (BeerSeller seller : sellers) {
+      if(pred.test(seller)) {
+        seller.changePrice(seller.price() * factor);
         count++;
       }
     }
@@ -127,7 +150,16 @@ class TestBeerSeller {
     System.out.println(newPrice(allOurBeer, (seller)-> {
           return seller.manufacturer().equals("Dugges") &&
             (seller.pub().equals("Rover") || seller.pub().equals("BrewDog"));
-            }) + " sellers changed");
+        }) + " sellers changed");
+    System.out.println(allOurBeer);
+    
+    System.out.println("=========Using predicate and factor===========");
+    allOurBeer = getSellers();
+    System.out.println(allOurBeer);
+    System.out.println(newPrice(allOurBeer, (seller)-> {
+          return seller.manufacturer().equals("Dugges") &&
+            (seller.pub().equals("Rover") || seller.pub().equals("BrewDog"));
+        }, 0.9) + " sellers changed");
     System.out.println(allOurBeer);
     
   }
@@ -147,6 +179,14 @@ class TestBeerSeller {
 
   /* Example run:
 $ javac BeerSeller.java && java TestBeerSeller
+[Rover, Dugges, Dugges tönt-ipa, 30.00 kr, Rover, Dugges, Dugges Fixed-steering DIPA, 40.00 kr, Rover, Pripps, Ett skepp i nöd, 30.00 kr, BrewDog, Dugges, Dugges stor stark, 30.00 kr, BrewDog, Dugges, Dugges tönt-ipa, 30.00 kr, BrewDog, Spendrups, Old Gold, 30.00 kr, DaMario, Dugges, PIPA, 30.00 kr, Golden Days, Dugges, Dugges tönt-ipa, 30.00 kr]
+4 sellers changed
+[Rover, Dugges, Dugges tönt-ipa, 27.00 kr, Rover, Dugges, Dugges Fixed-steering DIPA, 36.00 kr, Rover, Pripps, Ett skepp i nöd, 30.00 kr, BrewDog, Dugges, Dugges stor stark, 27.00 kr, BrewDog, Dugges, Dugges tönt-ipa, 27.00 kr, BrewDog, Spendrups, Old Gold, 30.00 kr, DaMario, Dugges, PIPA, 30.00 kr, Golden Days, Dugges, Dugges tönt-ipa, 30.00 kr]
+=========Using predicate===========
+[Rover, Dugges, Dugges tönt-ipa, 30.00 kr, Rover, Dugges, Dugges Fixed-steering DIPA, 40.00 kr, Rover, Pripps, Ett skepp i nöd, 30.00 kr, BrewDog, Dugges, Dugges stor stark, 30.00 kr, BrewDog, Dugges, Dugges tönt-ipa, 30.00 kr, BrewDog, Spendrups, Old Gold, 30.00 kr, DaMario, Dugges, PIPA, 30.00 kr, Golden Days, Dugges, Dugges tönt-ipa, 30.00 kr]
+4 sellers changed
+[Rover, Dugges, Dugges tönt-ipa, 27.00 kr, Rover, Dugges, Dugges Fixed-steering DIPA, 36.00 kr, Rover, Pripps, Ett skepp i nöd, 30.00 kr, BrewDog, Dugges, Dugges stor stark, 27.00 kr, BrewDog, Dugges, Dugges tönt-ipa, 27.00 kr, BrewDog, Spendrups, Old Gold, 30.00 kr, DaMario, Dugges, PIPA, 30.00 kr, Golden Days, Dugges, Dugges tönt-ipa, 30.00 kr]
+=========Using predicate and factor===========
 [Rover, Dugges, Dugges tönt-ipa, 30.00 kr, Rover, Dugges, Dugges Fixed-steering DIPA, 40.00 kr, Rover, Pripps, Ett skepp i nöd, 30.00 kr, BrewDog, Dugges, Dugges stor stark, 30.00 kr, BrewDog, Dugges, Dugges tönt-ipa, 30.00 kr, BrewDog, Spendrups, Old Gold, 30.00 kr, DaMario, Dugges, PIPA, 30.00 kr, Golden Days, Dugges, Dugges tönt-ipa, 30.00 kr]
 4 sellers changed
 [Rover, Dugges, Dugges tönt-ipa, 27.00 kr, Rover, Dugges, Dugges Fixed-steering DIPA, 36.00 kr, Rover, Pripps, Ett skepp i nöd, 30.00 kr, BrewDog, Dugges, Dugges stor stark, 27.00 kr, BrewDog, Dugges, Dugges tönt-ipa, 27.00 kr, BrewDog, Spendrups, Old Gold, 30.00 kr, DaMario, Dugges, PIPA, 30.00 kr, Golden Days, Dugges, Dugges tönt-ipa, 30.00 kr]
