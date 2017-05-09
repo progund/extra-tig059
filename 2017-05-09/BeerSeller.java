@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /* Skriv en metod som sänker priset på alla öl från
  * tillverkaren Dugges med 10% om pubben antingen är
@@ -89,12 +90,37 @@ class TestBeerSeller {
     }
     return count;
   }
+
+  static int newPrice(List<BeerSeller> sellers, Predicate<BeerSeller> pred) {
+    int count = 0;
+    /* Loop through all beer sellers, and if
+       the current seller has manufacturer Dugges
+       AND pub is (either Rover or BrewDog), 
+       then lower the price with 10% */
+    for (BeerSeller seller : sellers) {
+      if(pred.test(seller)) {
+        seller.changePrice(seller.price()*0.9);
+        count++;
+      }
+    }
+    return count;
+  }
   
   public static void main(String[] args) {
     List<BeerSeller> allOurBeer = getSellers();
     System.out.println(allOurBeer);
     System.out.println(newPrice(allOurBeer) + " sellers changed");
     System.out.println(allOurBeer);
+
+    System.out.println("=========Using predicate===========");
+    allOurBeer = getSellers();
+    System.out.println(allOurBeer);
+    System.out.println(newPrice(allOurBeer, (seller)-> {
+          return seller.manufacturer().equals("Dugges") &&
+            (seller.pub().equals("Rover") || seller.pub().equals("BrewDog"));
+            }) + " sellers changed");
+    System.out.println(allOurBeer);
+    
   }
   
   static List<BeerSeller>getSellers() {
