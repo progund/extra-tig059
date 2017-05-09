@@ -80,8 +80,16 @@ public class TwoDimensional {
   }
   
   /* Formats one double as ###,###.00 which means
-   * first the whole number pad thousands with comma, then two digits
+   * first the whole number pad thousands with space, then two digits
    * and pad with 0s.
+   *
+   * For instance, the sale 12312.2 becomes:
+   * "  12 312.20"
+   *
+   * Make it right-aligned 11 characters wide,
+   * separate the thousands with a space,
+   * and include two decimal places padded with
+   * zeros.
    */
   static String formatSale(double sale) {
     String pattern = "###,###.00";
