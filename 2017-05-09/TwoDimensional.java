@@ -2,7 +2,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
 /* Exam question:
- * 
+ * Skriv en metod som skriver ut veckoförsäljningen i en tabell.
  */
 public class TwoDimensional {
 
@@ -89,11 +89,7 @@ public class TwoDimensional {
     DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance();
     symbols.setGroupingSeparator(' ');
     DecimalFormat df = new DecimalFormat(pattern, symbols);
-    try {
-      result = df.format(sale);
-    } catch (Exception e) {
-      throw new IllegalStateException("Format error");
-    }
+    result = df.format(sale);
     return String.format("%11s", result);
   }
 
