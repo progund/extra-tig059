@@ -32,6 +32,15 @@ import java.util.function.Predicate;
  *
  * Lösningsförslag är static int newPrice(List<BeerSeller>)
  * nedan.
+ *
+ * Bonuslösningsförslag: 
+ * int newPrice(List<BeerSeller>, Predicate<BeerSeller>)
+ * Använder det funktionella interface:et Predicate<T>
+ * Så att vi kan använda samma metod för att sänka pris
+ * på fler kriterier. Anropas med lambdauttryck.
+ *
+ * Kommentar: Det vore ännu bättre om vi kunde skicka in som
+ * argument även prisförändringen i procent eller så.
  */
 public class BeerSeller {
 
